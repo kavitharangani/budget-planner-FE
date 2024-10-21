@@ -1,0 +1,114 @@
+<div class="navbar bg-blue-600 text-white p-4">
+    <h2 class="text-2xl font-bold">EXPENSE</h2>
+</div>
+
+<div class="main-container p-6 bg-gray-100 min-h-screen">
+    <div class="container mx-auto bg-white rounded-lg shadow-lg p-6">
+        <form [formGroup]="expenseForm" (ngSubmit)="onSubmitExpense()" class="input-form">
+            <div class="form-group mb-6">
+                <label for="month" class="block text-sm font-medium text-gray-700">Select Month:</label>
+                <select formControlName="month" id="month" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" (change)="onChangeExpense($event)">
+                    <option value="" disabled>Select Month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-6">
+                <label for="expenseType" class="block text-sm font-medium text-gray-700">Expense Type:</label>
+                <input type="text" formControlName="expenseType" id="expenseType" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" placeholder="Enter expense type">
+            </div>
+
+            <div class="form-group mb-6">
+                <label for="expenseAmount" class="block text-sm font-medium text-gray-700">Amount:</label>
+                <input type="number" formControlName="expenseAmount" id="expenseAmount" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" placeholder="Enter amount">
+            </div>
+            
+
+            <button type="submit" class="btn btn-primary w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200 mt-4">
+                {{ currentExpenseIndex !== null ? 'Update Expense' : 'Add Expense' }}
+            </button>
+        </form>
+
+        <hr class="my-6">
+
+        <h3 class="text-lg font-semibold mb-4">Expense List</h3>
+        <table class="table-auto w-full border border-gray-300 mb-6">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2 text-left">Month</th>
+                    <th class="px-4 py-2 text-left">Expense Type</th>
+                    <th class="px-4 py-2 text-left">Amount</th>
+                    <th class="px-4 py-2 text-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let expense of expense; let i = index">
+                    <td class="border px-4 py-2">{{ expense.month }}</td>
+                    <td class="border px-4 py-2">{{ expense.expenseType }}</td>
+                    <td class="border px-4 py-2">${{ expense.expenseAmount }}</td>
+                    <td class="border px-4 py-2">
+                        <button class="btn btn-warning bg-yellow-500 text-white py-1 px-2 mr-2 rounded-md hover:bg-yellow-600 transition duration-200" (click)="editExpense(expense, i)">Edit</button>
+                        <button class="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition duration-200" (click)="removeExpense(expense)">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="input-form mb-6">
+            <button
+            class="btn btn-primary w-60 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200 ml-96"
+            (click)="saveExpense()"> 
+            Save
+        </button>
+        <!-- <button class="btn btn-primary w-60 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200 ml-96" (click)="saveExpense">Save</button> -->
+        </div>
+
+        <div class="total-expense mt-4 font-semibold">
+            Total Expenses: ${{ calculateTotalExpense() }}
+        </div>
+
+        <hr class="my-6"> <!-- New separator for the filtered expenses -->
+
+        <h3 class="text-lg font-semibold mb-4">Filtered Expenses for {{ selectedMonth }}</h3>
+        <table class="table-auto w-full border border-gray-300 mb-6">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2 text-left">Month</th>
+                    <th class="px-4 py-2 text-left">Expense Type</th>
+                    <th class="px-4 py-2 text-left">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let expense of filteredExpenses">
+                    <td class="border px-4 py-2">{{ expense.month }}</td>
+                    <td class="border px-4 py-2">{{ expense.expenseType }}</td>
+                    <td class="border px-4 py-2">${{ expense.expenseAmount }}</td>
+                </tr> -->
+                <tr *ngFor="let expense of filteredExpenses">
+                    <td class="border px-4 py-2">{{ expense.month }}</td>
+                    <td class="border px-4 py-2">{{ expense.expenseType }}</td>
+                    <td class="border px-4 py-2">{{ expense.expenseAmount | currency:'USD':'symbol' }}</td>
+                  </tr>                  
+                <tr *ngIf="filteredExpenses.length === 0">
+                    <td class="border px-4 py-2 text-center" colspan="3">No expenses found for {{ selectedMonth }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="input-form mb-6 flex justify-end">
+            <button class="btn btn-primary w-60 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200 ml-96" (click)="onBack()">Back</button>
+        </div>
+        
+    </div>
+</div>

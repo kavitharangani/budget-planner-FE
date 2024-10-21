@@ -1,0 +1,103 @@
+<div class="navbar bg-green-600 text-white p-4">
+    <h2 class="text-2xl font-bold">INCOME</h2>
+</div>
+
+<div class="main-container p-6 bg-gray-100 min-h-screen">
+    <div class="container mx-auto bg-white rounded-lg shadow-lg p-6">
+        <form [formGroup]="incomeForm" (ngSubmit)="onSubmitIncome()" class="input-form">
+            <div class="form-group mb-6">
+                <label for="month" class="block text-sm font-medium text-gray-700">Select Month:</label>
+                <select formControlName="month" id="month" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500" (change)="onChangeIncome($event)">
+                    <option value="" disabled>Select Month</option>
+                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-6">
+                <label for="incomeSource" class="block text-sm font-medium text-gray-700">Income Source:</label>
+                <input type="text" formControlName="incomeSource" id="incomeSource" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500" placeholder="Enter income source">
+            </div>
+
+            <div class="form-group mb-6">
+                <label for="incomeAmount" class="block text-sm font-medium text-gray-700">Amount:</label>
+                <input type="number" formControlName="incomeAmount" id="incomeAmount" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500" placeholder="Enter amount">
+            </div>
+
+            <div class="form-group mb-6">
+                <label for="investments" class="block text-sm font-medium text-gray-700">Investments:</label>
+                <input type="text" formControlName="investments" id="investments" class="form-control mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500" placeholder="Enter investment ">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 mt-4">
+                {{ currentIncomeIndex !== null ? 'Update Income' : 'Add Income' }}
+            </button>
+        </form>
+
+        <hr class="my-6">
+
+        <h3 class="text-lg font-semibold mb-4">Income List</h3>
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th class="border px-4 py-2">Month</th>
+                <th class="border px-4 py-2">Income Source</th>
+                <th class="border px-4 py-2">Income Amount</th>
+                <th class="border px-4 py-2">Income Investments</th>
+                <th class="border px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let income of filteredIncomes; let i = index">
+                    <td class="border px-4 py-2">{{ income.month }}</td>
+                    <td class="border px-4 py-2">{{ income.source }}</td> <!-- Updated -->
+                    <td class="border px-4 py-2">${{ income.amount }}</td> <!-- Updated -->
+                    <td class="border px-4 py-2">{{ income.investments }}</td>
+                    <td class="border px-4 py-2">
+                        <button class="btn btn-warning bg-yellow-500 text-white py-1 px-2 mr-2 rounded-md hover:bg-yellow-600 transition duration-200" (click)="editIncome(income, i)">Edit</button>
+                        <button class="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition duration-200" (click)="removeIncome(income)">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+            
+          </table>
+
+        <div class="input-form mb-6">
+            <button
+            class="btn btn-primary w-60 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 ml-96"
+            (click)="saveIncome()"> 
+            Save
+        </button>
+        </div>
+
+        <div class="total-income mt-4 font-semibold">
+            Total Income: ${{ calculateTotalIncome() }}
+        </div>
+
+        <hr class="my-6">
+
+        <h3 class="text-lg font-semibold mb-4">Filtered Incomes for {{ selectedMonth }}</h3>
+        <table class="table-auto w-full border border-gray-300 mb-6">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2 text-left">Month</th>
+                    <th class="px-4 py-2 text-left">Income Source</th>
+                    <th class="px-4 py-2 text-left">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let income of filteredIncomes">
+                    <td class="border px-4 py-2">{{ income.month }}</td>
+                    <td class="border px-4 py-2">{{ income.incomeSource }}</td>
+                    <td class="border px-4 py-2">{{ income.incomeAmount | currency:'USD':'symbol' }}</td>
+                </tr>                  
+                <tr *ngIf="filteredIncomes.length === 0">
+                    <td class="border px-4 py-2 text-center" colspan="3">No incomes found for {{ selectedMonth }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="input-form mb-6 flex justify-end">
+            <button class="btn btn-primary w-60 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 ml-96" (click)="onBack()">Back</button>
+        </div>
+    </div>
+</div>
