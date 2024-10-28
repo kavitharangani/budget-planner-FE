@@ -103,6 +103,8 @@ export class ExpenseComponent implements OnInit {
       (expense) => expense.month === this.selectedMonth
     );
   }
+
+  
   // saveExpense(expense: any): void {
   //   console.log("Saving expense:", expense);
   //   this.expenseService.saveExpense(expense).subscribe(
@@ -200,6 +202,27 @@ saveExpense(): void {
   );
 }
 
-
+getExpensesByMonth(month: string): void {
+  if (month) {
+    this.expenseService.getExpensesByMonth(month).subscribe(
+      (response:any) => {
+        if (response.expenses.length === 0) {
+          console.log('No expenses found for this month');
+          this.filteredExpenses = [];  // Reset if no expenses are found
+        } else {
+          this.filteredExpenses = response.expenses;  // Store fetched expenses
+        }
+      },
+      (error:any) => {
+        if (error.status === 404) {
+          console.error(`No expenses found for the month: ${month}`);
+        } else {
+          console.error('Error fetching expenses:', error);
+        }
+        this.filteredExpenses = [];  // Reset if there’s an error
+      }
+    );
+  }
+}
   
 }

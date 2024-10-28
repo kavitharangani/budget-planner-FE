@@ -13,6 +13,7 @@ export interface Expense {
   providedIn: 'root',
 })
 export class ExpenseService {
+ 
   private apiUrl = 'http://localhost:3000/api/expenses';
   selectedMonth: any;
   
@@ -43,9 +44,13 @@ export class ExpenseService {
   
 
   // Fetch expenses for a specific month from the API
-  getExpenses(month: string): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${this.apiUrl}?month=${month}`);
+  getExpensesByMonth(month: string): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.apiUrl}/month?month=${month}`);
   }
+  // getExpensesByMonth(month: string): Observable<Expense[]> {
+  //   return this.http.get<Expense[]>(`${this.apiUrl}?month=${month}`);
+  // }
+  
   
   private getToken(): string {
     return localStorage.getItem('token') || '';

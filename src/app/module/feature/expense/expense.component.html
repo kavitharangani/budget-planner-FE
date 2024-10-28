@@ -83,18 +83,13 @@
         <h3 class="text-lg font-semibold mb-4">Filtered Expenses for {{ selectedMonth }}</h3>
         <table class="table-auto w-full border border-gray-300 mb-6">
             <thead>
-                <tr class="bg-gray-200">
+            <tr class="bg-gray-200">
                     <th class="px-4 py-2 text-left">Month</th>
                     <th class="px-4 py-2 text-left">Expense Type</th>
                     <th class="px-4 py-2 text-left">Amount</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr *ngFor="let expense of filteredExpenses">
-                    <td class="border px-4 py-2">{{ expense.month }}</td>
-                    <td class="border px-4 py-2">{{ expense.expenseType }}</td>
-                    <td class="border px-4 py-2">${{ expense.expenseAmount }}</td>
-                </tr> -->
                 <tr *ngFor="let expense of filteredExpenses">
                     <td class="border px-4 py-2">{{ expense.month }}</td>
                     <td class="border px-4 py-2">{{ expense.expenseType }}</td>
